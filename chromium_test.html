@@ -26,6 +26,15 @@
     margin-top: -9px;
 }
 </style>
+
+<script>
+    const enableFeature = async () => {
+      await document.featurePolicy.requestPermission('browsing-topics');
+      // 在此处编写其他代码
+    };
+
+    enableFeature();
+  </script>
 </head>
 
 <body>
