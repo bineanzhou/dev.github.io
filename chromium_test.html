@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>chromium test</title>
+<style>
+.four
+{
+	width:150px;
+	height:150px;
+	border:1px red solid;	
+	display:inline-block;
+	position:relative;
+}
+.four:after{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 50%;
+    top: 50%;
+    border-style: solid;
+    border-color: transparent transparent transparent blue;
+	border-width: 9px 0 9px 15.6px;
+    margin-left: -5px;
+    margin-top: -9px;
+}
+</style>
+</head>
+
+<body>
+
+<span class="four"></span>
+<p><b>注意:</b> "border-color" 属性 如果单独使用则不起作用. 要先使用 "border-style" 属性来设置 borders .</p>
+</body>
+</html>
