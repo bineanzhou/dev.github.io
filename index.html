@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f4f1ea" />
+  <title>Dev Tools | 开发工具集合</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="./assets/css/index.css" />
+  <link rel="stylesheet" href="./assets/css/pages.css" />
+</head>
+<body>
+
+  <div class="bg-decoration" aria-hidden="true"></div>
+
+  <!-- ===== Top Nav ===== -->
+  <nav class="topnav" aria-label="Primary">
+    <a href="./" class="topnav-brand">
+      <span class="topnav-mark">Dev Tools</span>
+    </a>
+    <ul class="topnav-list">
+      <li><a href="#sec-app-bridge">Bridge</a></li>
+      <li><a href="#sec-tools">Tools</a></li>
+    </ul>
+    <a href="https://github.com/jt-519/dev-page" target="_blank" class="topnav-gh" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    </a>
+  </nav>
+
+  <!-- ===== Hero Header ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="hero-badge">
+        <span>Dev Tools</span>
+        <span class="hero-badge-sep">&middot;</span>
+        <span>GitHub Pages</span>
+        <span class="hero-badge-sep">&middot;</span>
+        <span>05 Pages</span>
+      </div>
+      <h1 class="hero-title">
+        Dev Tools
+      </h1>
+      <p class="hero-subtitle">Front-End Diagnostics &amp; Testing Hub</p>
+      <p class="hero-lede">
+        围绕 <em>Chromium 内核升级</em>、<em>JSBridge 调试</em> 与基础测试场景整理的工具索引——所有页面统一收敛到 <code>pages/</code> 目录。
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== Main ===== -->
+  <main class="container">
+
+    <!-- Chromium 测试 -->
+    <section class="section" id="sec-chromium" data-category="chromium">
+      <div class="section-header">
+        <div class="section-numeral" aria-hidden="true">01</div>
+        <div class="section-info">
+          <span class="section-kicker">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+            <span>Chapter One</span>
+          </span>
+          <h2>Chromium 测试</h2>
+          <p class="section-dek"><em>内核升级</em>验证、能力检测与渲染基准集合——围绕 WebView 内核升级前后行为差异展开。</p>
+        </div>
+        <div class="section-count">
+          <span class="count-num">01</span>
+          <span class="count-label">Site</span>
+        </div>
+      </div>
+
+      <div class="card-grid">
+
+        <a class="card" href="https://jt-519.github.io/chromium" target="_blank">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue)"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+            </div>
+            <div class="card-title">
+              jt-519.github.io/chromium
+              <span class="arrow">&nearr;</span>
+            </div>
+          </div>
+          <div class="card-desc">Chromium 内核升级验证、能力检测、渲染基准与升核差异分析——已迁移至独立站点</div>
+          <div class="card-tags">
+            <span class="tag tag-blue">Kernel</span>
+            <span class="tag tag-green">Benchmark</span>
+            <span class="tag tag-orange">Diff</span>
+          </div>
+          <div class="card-path">jt-519.github.io/chromium</div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- App JSBridge 测试 -->
+    <section class="section" id="sec-app-bridge" data-category="app-bridge">
+      <div class="section-header">
+        <div class="section-numeral" aria-hidden="true">02</div>
+        <div class="section-info">
+          <span class="section-kicker">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Chapter Two</span>
+          </span>
+          <h2>App JSBridge 测试</h2>
+          <p class="section-dek">原生 App 中 <em>WebView JSBridge</em> 调试集合——覆盖头条多多 / RisApp / 步步盈三个壳层。</p>
+        </div>
+        <div class="section-count">
+          <span class="count-num">03</span>
+          <span class="count-label">Pages</span>
+        </div>
+      </div>
+
+      <div class="card-grid">
+
+        <a class="card" href="./pages/app-bridge/dev_ttdd.html" target="_blank">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange)"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+            </div>
+            <div class="card-title">
+              dev_ttdd.html
+              <span class="arrow">&nearr;</span>
+            </div>
+          </div>
+          <div class="card-desc">头条多多 App JSBridge 调试，包含分享、登录、打点、任务等接口</div>
+          <div class="card-tags">
+            <span class="tag tag-blue">Android</span>
+            <span class="tag tag-purple">iOS</span>
+            <span class="tag tag-orange">ttdd</span>
+          </div>
+          <div class="card-path">pages/app-bridge/dev_ttdd.html</div>
+        </a>
+
+        <a class="card" href="./pages/app-bridge/dev_risapp.html" target="_blank">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue)"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div class="card-title">
+              dev_risapp.html
+              <span class="arrow">&nearr;</span>
+            </div>
+          </div>
+          <div class="card-desc">RisApp WebView JSBridge 调试，包含登录、返回、基础信息等接口</div>
+          <div class="card-tags">
+            <span class="tag tag-blue">Android</span>
+            <span class="tag tag-purple">iOS</span>
+            <span class="tag tag-green">risapp</span>
+          </div>
+          <div class="card-path">pages/app-bridge/dev_risapp.html</div>
+        </a>
+
+        <a class="card" href="./pages/app-bridge/dev_tramp.html" target="_blank">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pink)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="card-title">
+              dev_tramp.html
+              <span class="arrow">&nearr;</span>
+            </div>
+          </div>
+          <div class="card-desc">步步盈 App WebView 调试，包含 HttpPost、登录、标题、菜单等接口</div>
+          <div class="card-tags">
+            <span class="tag tag-cyan">Flutter</span>
+            <span class="tag tag-pink">tramp</span>
+          </div>
+          <div class="card-path">pages/app-bridge/dev_tramp.html</div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- 工具页 -->
+    <section class="section" id="sec-tools" data-category="tools">
+      <div class="section-header">
+        <div class="section-numeral" aria-hidden="true">03</div>
+        <div class="section-info">
+          <span class="section-kicker">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span>Appendix</span>
+          </span>
+          <h2>工具页</h2>
+          <p class="section-dek">辅助类页面，包括 <em>错误兜底</em>、跳转代理与运行时辅助。</p>
+        </div>
+        <div class="section-count">
+          <span class="count-num">01</span>
+          <span class="count-label">Page</span>
+        </div>
+      </div>
+
+      <div class="card-grid">
+
+        <a class="card" href="./pages/error.html" target="_blank">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--red)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="card-title">
+              error.html
+              <span class="arrow">&nearr;</span>
+            </div>
+          </div>
+          <div class="card-desc">网络错误兜底页，支持通过 URL 参数传入跳转地址重新加载</div>
+          <div class="card-tags">
+            <span class="tag tag-red">Error</span>
+            <span class="tag tag-orange">Fallback</span>
+          </div>
+          <div class="card-path">pages/error.html</div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="footer-wrap">
+      <div class="footer-bottom">
+        <span class="footer-copy">Dev Tools</span>
+        <a href="https://github.com/jt-519/dev-page" target="_blank" class="footer-build">GitHub &nearr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="qr-btn" aria-label="Show QR code"></button>
+  <script src="./assets/js/qrcode.js"></script>
+
+</body>
+</html>

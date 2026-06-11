@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f1ea" />
+  <title>头条多多 JSBridge 调试 — dev-page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="page-header">
+      <a href="../../index.html" class="page-back">返回导航首页</a>
+      <div class="page-eyebrow">App Bridge · ttdd · JXAPP</div>
+      <h1 class="page-title">头条多多 <em>JSBridge</em></h1>
+      <p class="page-subtitle">JXAPP Bridge 调试 · 分享 / 登录 / 打点 / 任务墙等接口</p>
+    </header>
+
+    <!-- UA -->
+    <div class="p-section">
+      <div class="p-section-title">基础信息 <span class="sect-num">01</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn p-btn-teal" onclick="testAlert()">显示 UA</button>
+        <button class="p-btn" onclick="testGetBaseApi()">获取基本接口地址</button>
+        <button class="p-btn" onclick="testGetVersion()">获取版本</button>
+        <button class="p-btn" onclick="testGetStatusBarHeight()">状态栏高度</button>
+      </div>
+    </div>
+
+    <!-- 用户 -->
+    <div class="p-section">
+      <div class="p-section-title">用户 / 登录 <span class="sect-num">02</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn" onclick="testIsLogin()">检测是否登录</button>
+        <button class="p-btn p-btn-accent" onclick="testShowLogin()">弹出登录</button>
+        <button class="p-btn" onclick="getUserInfo()">获取用户信息</button>
+        <button class="p-btn" onclick="testBindWeixin()">绑定微信</button>
+      </div>
+    </div>
+
+    <!-- 网络 / 数据 -->
+    <div class="p-section">
+      <div class="p-section-title">网络 / 数据 <span class="sect-num">03</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn" onclick="testGetUrl()">测试请求接口</button>
+        <button class="p-btn" onclick="testPost()">测试 POST</button>
+        <button class="p-btn" onclick="testCopy()">复制到剪贴板</button>
+        <button class="p-btn" onclick="testGetContacts()">获取通讯录</button>
+      </div>
+    </div>
+
+    <!-- 分享 / 传播 -->
+    <div class="p-section">
+      <div class="p-section-title">分享 / 传播 <span class="sect-num">04</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn p-btn-accent" onclick="testShare()">测试分享</button>
+        <button class="p-btn" onclick="testGetShareDomains()">获取分享替换域名</button>
+        <button class="p-btn" onclick="testSaveToAlbum()">保存到相册</button>
+        <button class="p-btn" onclick="testCreateShortCut()">测试快捷方式</button>
+        <button class="p-btn" onclick="testSendSms()">发送短信</button>
+      </div>
+    </div>
+
+    <!-- 窗口 / 导航 -->
+    <div class="p-section">
+      <div class="p-section-title">窗口 / 导航 <span class="sect-num">05</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn" onclick="testOpenNewWindow()">打开新窗口</button>
+        <button class="p-btn" onclick="testOpenApp()">打开 App</button>
+        <button class="p-btn" onclick="testOpenThirdApp()">调起微信 APP</button>
+        <button class="p-btn p-btn-red" onclick="testFinishPage()">关闭当前页面</button>
+        <button class="p-btn" onclick="testSetRightBtn()">设置右上角按钮</button>
+        <button class="p-btn" onclick="testJumpToPage()">跳转指定页面</button>
+        <button class="p-btn" onclick="testOpenHomeAndSearch()">跳转首页+搜索</button>
+        <button class="p-btn" onclick="testOpenSysSettings()">打开系统设置</button>
+        <button class="p-btn" onclick="testSearchKeywords()">搜索关键词</button>
+        <button class="p-btn" onclick="testGotoUrl()">内置浏览器打开 URL</button>
+        <button class="p-btn" onclick="testDisableDirectlyCloseBtn()">禁用直接关闭按钮</button>
+      </div>
+    </div>
+
+    <!-- 手势 / 返回键 -->
+    <div class="p-section">
+      <div class="p-section-title">手势 / 返回键 <span class="sect-num">06</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn" onclick="testDisableBackGesture()">禁用左滑手势</button>
+        <button class="p-btn" onclick="testEnableBackGesture()">启用左滑手势</button>
+        <button class="p-btn" onclick="testAddBackBtnListener()">注册返回键监听</button>
+        <button class="p-btn" onclick="testRemoveBackBtnListener()">取消返回键监听</button>
+      </div>
+    </div>
+
+    <!-- 新闻 / 内容 -->
+    <div class="p-section">
+      <div class="p-section-title">新闻 / 内容 <span class="sect-num">07</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn" onclick="testGetNews()">获取 3 条新闻</button>
+        <button class="p-btn" onclick="testOpenNewsById()">打开单条新闻</button>
+        <button class="p-btn" onclick="testOpenNewsDetail()">打开新闻详情</button>
+        <button class="p-btn" onclick="testNewsDetailFromScaheme()">Scheme 调起信息流</button>
+      </div>
+    </div>
+
+    <!-- 任务墙 / 红包 -->
+    <div class="p-section">
+      <div class="p-section-title">任务墙 / 红包 <span class="sect-num">08</span></div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn p-btn-accent" onclick="testRedPacketUrl()">拆红包</button>
+        <button class="p-btn" onclick="testShowHongbao()">弹出红包</button>
+        <button class="p-btn" onclick="testGetTaskList()">获取任务列表</button>
+        <button class="p-btn" onclick="testGetDeepTaskData()">获取深度任务</button>
+        <button class="p-btn" onclick="testStartTask()">启动任务</button>
+        <button class="p-btn" onclick="testDotting()">测试打点</button>
+        <button class="p-btn" onclick="checkAndShowImeiDlg()">请求 IMEI</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
+    function appExecute(method, param, fn) {
+      var actionData = "JXAPP@#@" + method + "@#@" + param + "@#@" + fn;
+      if (isiOS) {
+        try {
+          webkit.messageHandlers.JXiOS.postMessage(actionData);
+        } catch (error) {
+          console.error('ios context not exist ');
+        }
+      } else {
+        console.log(actionData);
+      }
+    }
+
+    window.JXApp_page_show = function () { console.log("页面pv"); };
+
+    function genCallback(func) {
+      var fn = "fn_" + parseInt(Math.random() * 10000);
+      window[fn] = func;
+      return fn;
+    }
+
+    function testAlert() { alert(navigator.userAgent); }
+    function alertResult(errCode, errMsg, result) {
+      if (errCode != 0) { alert("errCode:" + errCode + ",errMsg:" + errMsg); }
+      else { alert(result); }
+    }
+
+    function testGetBaseApi() {
+      appExecute("getBaseAPI", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testIsLogin() {
+      appExecute("isLogin", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function getUserInfo() {
+      appExecute("getUserInfo", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testGetUrl() {
+      var url = "https://api.toutiaoduoduo.com/app/getWeiInfo?wei_id=w003&random=" + Math.random();
+      appExecute("getUrl", url, genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testCopy() {
+      appExecute("copy", "复制内容random=" + Math.random(), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testGetContacts() {
+      appExecute("getContacts", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testShare() {
+      var o = {platform: 0, title: "", url: "http://www.so.com", img: "http://p3.qhimg.com/t01a762f373c655932d.png", content: "每天正常看新闻，赚了不少零花钱！怎么做到的..", from: "shoutu_qunfa_haibao_share", forceImg: true};
+      appExecute("share", JSON.stringify(o), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testOpenNewWindow() {
+      appExecute("openWindow", "http://www.so.com", "");
+    }
+    function testShowHongbao() {
+      appExecute("showHongbao", "swwike1234", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testBindWeixin() {
+      appExecute("bindWeixin", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testSetRightBtn() {
+      appExecute("openWindow", "http://159.89.245.190/testright.html?" + Math.random(), "");
+    }
+    function testShowLogin() {
+      appExecute("showLogin", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testDisableDirectlyCloseBtn() {
+      appExecute("enableDirectlyCloseBtn", "false", "");
+    }
+    function testJumpToPage() {
+      appExecute("jumpToPage", "newsListPage", genCallback(function (errCode, errMsg, result) { console.log(errCode, errMsg, result); }));
+    }
+    function testFinishPage() {
+      appExecute("finishPage", "false", "");
+    }
+    function testOpenNewsDetail() {
+      var s = '{"f":"","u":"https://sh.qihoo.com/mob/transcoding?url=http://www.yidianzixun.com/0IajDzmc","a":"h","t":"测试新闻详情","type":"newgood"}';
+      appExecute("openNewsDetail", s, "");
+    }
+    function testGetShareDomains() {
+      appExecute("getShareDomains", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testGetStatusBarHeight() {
+      appExecute("getStatusBarHeight", "", genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testDotting() {
+      appExecute("dotting", JSON.stringify({id: "key_evt_123", params: {channel: "youlike"}}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    var firstNewsId = "";
+    function testGetNews() {
+      appExecute("getNews", "3", genCallback(function (errCode, errMsg, result) {
+        var arr = JSON.parse(result);
+        firstNewsId = arr[0].id;
+        alertResult(errCode, errMsg, result);
+      }));
+    }
+    function testOpenNewsById() {
+      appExecute("openNewsDetailById", firstNewsId, genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testPost() {
+      appExecute("postUrlWithAuth", JSON.stringify({url: "http://xxxx", params: {"key1": "val1", "key2": "val2"}}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testSendSms() {
+      appExecute("sendSms", JSON.stringify({number: "18800010016", message: "测试短信内容"}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testCreateShortCut() {
+      appExecute("createShortCut", JSON.stringify({name: "爱搜索", url: "http://m.so.com/?srcg=1233", icon: "so_logo"}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testOpenApp() {
+      location.href = "jingxuanlite://m=gotoUrl&p=http://baidu.com";
+    }
+    function testDisableBackGesture() { appExecute("disableBackGesture", "", ""); }
+    function testEnableBackGesture() { appExecute("enableBackGesture", "", ""); }
+    var backFuncName;
+    function testAddBackBtnListener() {
+      backFuncName = genCallback(function () { alert("点击返回物理键"); });
+      appExecute("addBackBtnListener", "", backFuncName);
+    }
+    function testRemoveBackBtnListener() { appExecute("removeBackBtnListener", "", backFuncName); }
+    function testOpenHomeAndSearch() {
+      appExecute("jumpToPage", "newsListPage&anchorName=search", genCallback(function (errCode, errMsg, result) { console.log(errCode, errMsg, result); }));
+    }
+    function testOpenSysSettings() {
+      appExecute("openSysSettings", "", genCallback(function (errCode, errMsg, result) { console.log(errCode, errMsg, result); }));
+    }
+    function testGetVersion() {
+      try {
+        var appVer = navigator.userAgent.match(/App\/.+?(?=\s)/ig)[0].substr(4);
+        var browserVer = navigator.userAgent.match(/Browser\/.+?(?=\s)/ig)[0].substr(8);
+        alert(appVer + "," + browserVer);
+      } catch(e) { alert("版本信息不可用: " + e.message); }
+    }
+    function testNewsDetailFromScaheme() {
+      location.href = "jingxuanlite://navigate?qb_dot=&url=https%3A%2F%2Fm.look.360.cn%2Ftranscoding%3Furl%3Dhttp%253A%252F%252Fzm.news.so.com%252Ff1da7fe477cef790947093a03e92dabe";
+    }
+    function testOpenThirdApp() {
+      appExecute("openApp", "com.tencent.mm", genCallback(function (errCode, errMsg, result) { console.log(errCode, errMsg, result); }));
+    }
+    function testSaveToAlbum() {
+      appExecute("saveToAlbumWithBase64", JSON.stringify({base64: "", fileName: "duoduo_share_to_you.png"}), genCallback(function (errCode, errMsg, result) { console.log(errCode, errMsg, result); }));
+    }
+    function testSearchKeywords() {
+      appExecute("searchKeywords", JSON.stringify({keywords: "dj", backTitle: "返回答题", backUrl: "http://m.so.com"}), "");
+    }
+    function testGotoUrl() { appExecute("gotoUrl", "http://m.so.com", ""); }
+    function checkAndShowImeiDlg() {
+      var o = {title: "开启权限", button: "去开启", url: "jump://m=openSettings", description: "请先开启读取手机识别码权限，否则功能无法正常使用"};
+      appExecute("checkAndShowImeiDlg", JSON.stringify(o), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testGetTaskList() {
+      appExecute("getTaskList", JSON.stringify({currentPage: 1, pageSize: 10}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testGetDeepTaskData() {
+      appExecute("getDeepTaskData", JSON.stringify({}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testStartTask() {
+      appExecute("startTask", JSON.stringify({}), genCallback(function (errCode, errMsg, result) { alertResult(errCode, errMsg, result); }));
+    }
+    function testRedPacketUrl() {
+      appExecute("openWindow", "http://api.toutiaoduoduo.com/www/inapp/activity/red_envelope/home/index.html", "");
+    }
+
+    appExecute("onContentReady", "", "");
+  </script>
+
+  <!-- QR Code Button -->
+  <button class="qr-btn" aria-label="Show QR code"></button>
+  <script src="../../assets/js/qrcode.js"></script>
+
+</body>
+</html>

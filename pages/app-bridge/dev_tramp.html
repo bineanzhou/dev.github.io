@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f1ea" />
+  <title>步步盈 Flutter Bridge — dev-page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+  <style>
+    .group-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 20px 0 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="page-header">
+      <a href="../../index.html" class="page-back">返回导航首页</a>
+      <div class="page-eyebrow">App Bridge · tramp · Flutter</div>
+      <h1 class="page-title">步步盈 <em>Tramp</em></h1>
+      <p class="page-subtitle">步步盈 App WebView JSBridge 调试 · Qtramp / WebviewInterface</p>
+    </header>
+
+    <!-- HttpPost 测试 -->
+    <div class="p-section">
+      <div class="p-section-title">HttpPost 测试</div>
+      <div class="p-divider"></div>
+      <div class="p-card">
+        <div class="p-form-group">
+          <label class="p-label">参数 JSON</label>
+          <textarea class="p-textarea" name="textareaId" id="textareaId" rows="4"
+            placeholder='{"url":"...", "param":{...}}'
+          >{"url":"http://36.110.216.29/task/dispatch", "param":{ "page_id":"3","__step":true,"__use_duration":true} }</textarea>
+        </div>
+        <div class="p-form-group">
+          <label class="p-label">客户端方法名</label>
+          <input class="p-input" type="text" id="inputFn" placeholder="wvproxyHttpPost" value="wvproxyHttpPost">
+        </div>
+        <button id="postMessage" class="p-btn p-btn-accent" style="max-width:200px;">
+          ▶ HttpPost 测试
+        </button>
+      </div>
+    </div>
+
+    <!-- 系统接口 -->
+    <div class="p-section">
+      <div class="p-section-title">系统接口</div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button class="p-btn p-btn-teal" onclick="testPostMsg()">testPostMsg</button>
+        <button class="p-btn" onclick="showAlert()">显示 UA</button>
+        <button id="taskDispatch" class="p-btn">运动赚任务列表</button>
+      </div>
+    </div>
+
+    <!-- 账户接口 -->
+    <div class="p-section">
+      <div class="p-section-title">账户接口</div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button id="islogin" class="p-btn">判断是否登录</button>
+        <button id="login" class="p-btn p-btn-accent">登录</button>
+      </div>
+    </div>
+
+    <!-- 页面接口 -->
+    <div class="p-section">
+      <div class="p-section-title">页面接口</div>
+      <div class="p-divider"></div>
+      <div class="p-btn-grid">
+        <button id="setTitle" class="p-btn">设置标题</button>
+        <button id="setMenu" class="p-btn">设置菜单</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="https://s4.ssl.qhres.com/!2656994b/zepto.v11.js"></script>
+  <script type="text/javascript" src="https://s4.ssl.qhres.com/static/f35834b4a68ab51d.js"></script>
+  <script type="text/javascript">
+    var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
+    function testPostMsg() {
+      if (isiOS) {
+        try {
+          window.webkit.messageHandlers.Qtramp.postMessage("test", JSON.stringify({data: "js 调用 flutter"}), "callback");
+        } catch (error) {
+          console.error('ios context not exist ');
+        }
+      } else {
+        window.Qtramp && window.Qtramp.postMessage("test", JSON.stringify({data: "js 调用 flutter"}), "callback");
+      }
+    }
+
+    function showAlert() {
+      alert(navigator.userAgent);
+    }
+
+    $(document).ready(function () {
+      $("#postMessage").on("click", function () {
+        var name = $("#inputFn").val().replace(/ /g, "");
+        var postdata = $("#textareaId").val().replace(/ /g, "");
+        WebviewInterface.execute(name, postdata.indexOf('}') > -1 ? JSON.parse(postdata) : postdata).then(function (res) {
+          alert(JSON.stringify(res));
+        });
+      });
+
+      $("#taskDispatch").on("click", function () {
+        WebviewInterface.execute("wvproxyHttpPost", {
+          url: "http://36.110.216.29/task/dispatch",
+          param: {page_id: "3", __step: true, __anti_cheat: true, __use_duration: true}
+        }).then(function (res) {
+          alert(JSON.stringify(res));
+        });
+      });
+
+      $("#login").on("click", function () {
+        WebviewInterface.execute("login", {}).then(function (res) {
+          alert(JSON.stringify(res));
+        });
+      });
+
+      $("#islogin").on("click", function () {
+        WebviewInterface.execute("isLogin", {}).then(function (res) {
+          alert(JSON.stringify(res));
+        });
+      });
+
+      $("#setTitle").on("click", function () {
+        WebviewInterface.execute("setTitle", {title: "步步盈标题测试"}).then(function (res) {
+          alert(JSON.stringify(res));
+        });
+      });
+
+      $("#setMenu").on("click", function () {
+        WebviewInterface.execute("setMenu", {
+          name: "菜单",
+          list: [
+            {type: "web", name: "提现记录", icon: "https://jt-519.github.io/dev-page/assets/images/icon_wallet.png", url: "https://github.com/"},
+            {type: "click", name: "刷新", icon: "https://jt-519.github.io/dev-page/assets/images/icon_refresh.png", key: "refresh"}
+          ]
+        }).then(function (res) {
+          alert(JSON.stringify(res));
+        });
+      });
+    });
+  </script>
+
+  <!-- QR Code Button -->
+  <button class="qr-btn" aria-label="Show QR code"></button>
+  <script src="../../assets/js/qrcode.js"></script>
+
+</body>
+</html>

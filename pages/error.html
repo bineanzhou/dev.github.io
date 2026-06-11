@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f1ea" />
+  <title>网络错误 — dev-page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/pages.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 24px;
+    }
+
+    .error-card {
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .error-icon-wrap {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 28px;
+      border: 2px solid rgba(168, 51, 46, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(168, 51, 46, 0.06);
+      position: relative;
+    }
+
+    .error-icon-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border: 1px dashed rgba(168, 51, 46, 0.12);
+      border-radius: 50%;
+      animation: spin 12s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .error-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--red);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .error-code {
+      font-family: var(--font-display);
+      font-size: 72px;
+      letter-spacing: 0.1em;
+      color: var(--red);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .error-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .error-desc {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      letter-spacing: 0.02em;
+    }
+
+    .reload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+      outline: none;
+    }
+
+    .reload-btn:hover {
+      background: rgba(139, 46, 46, 0.12);
+      box-shadow: 0 4px 16px rgba(139, 46, 46, 0.10);
+      transform: translateY(-2px);
+    }
+
+    .reload-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .reload-btn:active {
+      transform: translateY(0);
+    }
+
+    .reload-icon {
+      font-size: 14px;
+      transition: transform 0.4s ease;
+    }
+
+    .reload-btn:hover .reload-icon {
+      transform: rotate(180deg);
+    }
+
+    .error-footer {
+      margin-top: 40px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .error-footer a {
+      color: var(--text-muted);
+    }
+    .error-footer a:hover { color: var(--accent); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .error-card { animation: none; }
+      .error-icon-wrap::before { animation: none; }
+      .reload-btn:hover .reload-icon { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-card">
+    <div class="error-icon-wrap">
+      <span class="error-icon">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
+    </div>
+    <div class="error-code">ERR</div>
+    <div class="error-title">无网络连接</div>
+    <p class="error-desc">
+      网络连接已中断，请检查设备网络设置<br>
+      稍后点击下方按钮重新尝试
+    </p>
+    <button class="reload-btn" id="J_reloadNow">
+      <span class="reload-icon">↺</span>
+      重新加载
+    </button>
+    <div class="error-footer">
+      <a href="../index.html">← 返回导航</a>
+      &nbsp;·&nbsp;
+      dev-page · GitHub Pages
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('J_reloadNow').addEventListener('click', function() {
+      var href = '';
+      var search = window.location.search;
+      if (!search.length) {
+        href = '';
+      } else {
+        href = search.substring(1).split('=')[1];
+      }
+      window.location.href = href;
+    });
+  </script>
+
+  <!-- QR Code Button -->
+  <button class="qr-btn" aria-label="Show QR code"></button>
+  <script src="../assets/js/qrcode.js"></script>
+
+</body>
+</html>

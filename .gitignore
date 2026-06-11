@@ -1,0 +1,8 @@
+# ================================
+# AI Dev Tools
+# ================================
+.agents/
+.claude/
+.omo/
+ai-dev-reports/
+.ai-dev-cache/
