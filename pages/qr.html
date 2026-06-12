@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b14" />
+  <title>QR 码生成器 | Dev Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+
+    :root {
+      --bg:            #070b14;
+      --bg-2:          #0d1526;
+      --bg-3:          #121d35;
+      --bg-4:          #192847;
+      --text:          #e8eeff;
+      --text-2:        #8899c5;
+      --text-3:        #4d5e8a;
+      --accent:        #4361ee;
+      --accent-light:  #748ffc;
+      --accent-dim:    rgba(67, 97, 238, 0.10);
+      --accent-glow:   rgba(67, 97, 238, 0.18);
+      --accent-border: rgba(67, 97, 238, 0.30);
+      --border:        rgba(255, 255, 255, 0.06);
+      --border-2:      rgba(255, 255, 255, 0.10);
+      --radius:        6px;
+      --radius-sm:     4px;
+      --radius-lg:     12px;
+      --font-display:  'Syne', 'Noto Sans SC', 'PingFang SC', sans-serif;
+      --font-body:     'Inter', 'Noto Sans SC', 'PingFang SC', sans-serif;
+      --font-mono:     'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.038) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px;
+      left: -100px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(67,97,238,0.07), transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    ::selection { background: var(--accent); color: #fff; }
+    a { color: inherit; text-decoration: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Nav ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 4vw, 48px);
+      height: 52px;
+      background: rgba(7, 11, 20, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--text-3);
+      transition: color 0.15s;
+    }
+
+    .nav-back:hover { color: var(--accent-light); }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: var(--accent);
+      border-radius: 5px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .nav-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    /* ===== Main ===== */
+    .main {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 64px clamp(20px, 4vw, 40px) 80px;
+    }
+
+    /* ===== Header ===== */
+    .page-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      opacity: 0.75;
+      margin-bottom: 12px;
+      animation: fadeUp 0.4s 0.05s ease both;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 12px;
+      animation: fadeUp 0.5s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      animation: fadeUp 0.5s 0.17s ease both;
+    }
+
+    /* ===== Input area ===== */
+    .input-area {
+      animation: fadeUp 0.5s 0.24s ease both;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .qr-field {
+      flex: 1;
+      background: var(--bg-3);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      min-width: 0;
+    }
+
+    .qr-field::placeholder { color: var(--text-3); }
+
+    .qr-field:focus {
+      border-color: var(--accent-border);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+
+    .gen-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 13px 22px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+    }
+
+    .gen-btn:hover {
+      background: var(--accent-light);
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    .shortcuts {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .shortcut {
+      padding: 5px 12px;
+      background: transparent;
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius-sm);
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+
+    .shortcut:hover {
+      color: var(--text);
+      border-color: var(--accent-border);
+      background: var(--accent-dim);
+    }
+
+    /* ===== Preview ===== */
+    .preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 32px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .preview-canvas {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .preview-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      max-width: 280px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      padding: 9px 22px;
+      background: var(--bg-3);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius);
+      color: var(--text-2);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+    }
+
+    .action-btn:hover {
+      color: var(--text);
+      background: var(--bg-4);
+      border-color: var(--accent-border);
+    }
+
+    .action-btn--primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .action-btn--primary:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+      box-shadow: 0 4px 16px var(--accent-glow);
+      color: #fff;
+    }
+
+    /* ===== Empty / Error state ===== */
+    .state-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 48px 32px;
+      background: var(--bg-2);
+      border: 1px dashed var(--border-2);
+      border-radius: var(--radius-lg);
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .state-empty svg {
+      opacity: 0.25;
+    }
+
+    .state-error {
+      padding: 16px;
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.2);
+      border-radius: var(--radius);
+      color: #f87171;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      background: rgba(7, 11, 20, 0.7);
+    }
+
+    .footer-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px clamp(20px, 4vw, 40px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .footer-hint {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.08em;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 480px) {
+      .input-row { flex-direction: column; }
+      .gen-btn { justify-content: center; }
+      .preview-actions { flex-direction: column; width: 100%; }
+      .action-btn { text-align: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="../index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Dev Tools
+    </a>
+    <div class="nav-brand">
+      <span class="nav-mark">DT</span>
+      <span class="nav-name">QR Generator</span>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <p class="page-eyebrow">GENERATOR · LOCAL · OFFLINE</p>
+    <h1 class="page-title">QR 码生成器</h1>
+    <p class="page-sub">输入任意文本或 URL，即时生成可扫描的二维码——完全本地运行，不依赖外部服务。</p>
+
+    <div class="input-area">
+      <div class="input-row">
+        <input
+          id="qr-input"
+          class="qr-field"
+          type="text"
+          placeholder="输入 URL 或任意文本…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="gen-btn" id="gen-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M14 20h7M20 14v7"/></svg>
+          生成
+        </button>
+      </div>
+      <div class="shortcuts">
+        <button class="shortcut" id="fill-current">当前页面 URL</button>
+        <button class="shortcut" id="clear-btn">清空</button>
+      </div>
+    </div>
+
+    <div id="output-area">
+      <div class="state-empty" id="empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M14 20h7M20 14v7"/></svg>
+        输入内容后点击生成
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-hint">本地生成 · 数据不上传 · 支持离线</span>
+      <a href="../index.html" class="nav-back" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">← 返回首页</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/qrcode.js"></script>
+  <script>
+    (function() {
+      var input     = document.getElementById('qr-input');
+      var genBtn    = document.getElementById('gen-btn');
+      var outputArea = document.getElementById('output-area');
+      var emptyState = document.getElementById('empty-state');
+
+      function showEmpty(msg) {
+        outputArea.innerHTML =
+          '<div class="state-empty">' +
+          '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M14 20h7M20 14v7"/></svg>' +
+          (msg || '输入内容后点击生成') +
+          '</div>';
+      }
+
+      function showError(msg) {
+        outputArea.innerHTML = '<div class="state-error">' + msg + '</div>';
+      }
+
+      function generate() {
+        var text = input.value.trim();
+        if (!text) { showEmpty('请输入内容后生成'); return; }
+
+        var wrap = document.createElement('div');
+        try {
+          new QRCode(wrap, {
+            text: text,
+            width: 240,
+            height: 240,
+            colorDark: '#070b14',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        } catch(e) {
+          showError('生成失败，请检查输入内容是否有效');
+          return;
+        }
+
+        var img = wrap.querySelector('img');
+        var cv  = wrap.querySelector('canvas');
+        if (img) img.style.cssText = 'display:block;width:240px;height:240px;';
+        if (cv)  cv.style.cssText  = 'display:block;width:240px;height:240px;';
+
+        var preview = document.createElement('div');
+        preview.className = 'preview';
+
+        var frame = document.createElement('div');
+        frame.className = 'preview-canvas';
+        frame.appendChild(wrap);
+
+        var label = document.createElement('div');
+        label.className = 'preview-text';
+        label.textContent = text;
+
+        var actions = document.createElement('div');
+        actions.className = 'preview-actions';
+
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'action-btn';
+        copyBtn.textContent = '复制文本';
+        copyBtn.addEventListener('click', function() {
+          navigator.clipboard.writeText(text).then(function() {
+            var orig = copyBtn.textContent;
+            copyBtn.textContent = '✓ 已复制';
+            setTimeout(function() { copyBtn.textContent = orig; }, 1800);
+          }).catch(function() { alert('复制失败，请手动复制：' + text); });
+        });
+
+        var dlBtn = document.createElement('button');
+        dlBtn.className = 'action-btn action-btn--primary';
+        dlBtn.textContent = '下载 PNG';
+        dlBtn.addEventListener('click', function() {
+          var canvas = wrap.querySelector('canvas');
+          var imgEl  = wrap.querySelector('img');
+          var a = document.createElement('a');
+          a.download = 'qrcode.png';
+          if (canvas)     { a.href = canvas.toDataURL('image/png'); a.click(); }
+          else if (imgEl) { a.href = imgEl.src; a.click(); }
+        });
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(dlBtn);
+
+        preview.appendChild(frame);
+        preview.appendChild(label);
+        preview.appendChild(actions);
+
+        outputArea.innerHTML = '';
+        outputArea.appendChild(preview);
+      }
+
+      genBtn.addEventListener('click', generate);
+      input.addEventListener('keydown', function(e) { if (e.key === 'Enter') generate(); });
+
+      document.getElementById('fill-current').addEventListener('click', function() {
+        input.value = window.location.href;
+        generate();
+      });
+
+      document.getElementById('clear-btn').addEventListener('click', function() {
+        input.value = '';
+        showEmpty();
+      });
+
+      input.focus();
+    })();
+  </script>
+
+</body>
+</html>
