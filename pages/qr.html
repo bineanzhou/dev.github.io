@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
 
     :root {
       --bg:            #070b14;
@@ -28,8 +28,8 @@
       --radius:        6px;
       --radius-sm:     4px;
       --radius-lg:     12px;
-      --font-display:  'Syne', 'Noto Sans SC', 'PingFang SC', sans-serif;
-      --font-body:     'Inter', 'Noto Sans SC', 'PingFang SC', sans-serif;
+      --font-display:  'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', monospace;
+      --font-body:     'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       --font-mono:     'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
     }
 
@@ -483,6 +483,7 @@
         var text = input.value.trim();
         if (!text) { showEmpty('请输入内容后生成'); return; }
 
+        // Render into a detached div — never appended to DOM
         var wrap = document.createElement('div');
         try {
           new QRCode(wrap, {
@@ -498,17 +499,31 @@
           return;
         }
 
-        var img = wrap.querySelector('img');
-        var cv  = wrap.querySelector('canvas');
-        if (img) img.style.cssText = 'display:block;width:240px;height:240px;';
-        if (cv)  cv.style.cssText  = 'display:block;width:240px;height:240px;';
+        // Synchronously grab canvas data URL before the library's async iframe step fires.
+        // This avoids the file:// security block on iframe-based img conversion.
+        var cv = wrap.querySelector('canvas');
+        var qrDataUrl = '';
+        if (cv) { try { qrDataUrl = cv.toDataURL('image/png'); } catch(e) {} }
+
+        var displayEl;
+        if (qrDataUrl) {
+          displayEl = new Image();
+          displayEl.src = qrDataUrl;
+          displayEl.style.cssText = 'display:block;width:240px;height:240px;';
+        } else if (cv) {
+          cv.style.cssText = 'display:block;width:240px;height:240px;';
+          displayEl = cv;
+        } else {
+          showError('生成失败，请检查输入内容是否有效');
+          return;
+        }
 
         var preview = document.createElement('div');
         preview.className = 'preview';
 
         var frame = document.createElement('div');
         frame.className = 'preview-canvas';
-        frame.appendChild(wrap);
+        frame.appendChild(displayEl);
 
         var label = document.createElement('div');
         label.className = 'preview-text';
@@ -521,23 +536,39 @@
         copyBtn.className = 'action-btn';
         copyBtn.textContent = '复制文本';
         copyBtn.addEventListener('click', function() {
-          navigator.clipboard.writeText(text).then(function() {
+          function onCopied() {
             var orig = copyBtn.textContent;
             copyBtn.textContent = '✓ 已复制';
             setTimeout(function() { copyBtn.textContent = orig; }, 1800);
-          }).catch(function() { alert('复制失败，请手动复制：' + text); });
+          }
+          function execFallback() {
+            try {
+              var ta = document.createElement('textarea');
+              ta.value = text;
+              ta.style.cssText = 'position:fixed;left:-9999px;top:0;';
+              document.body.appendChild(ta);
+              ta.focus(); ta.select();
+              var ok = document.execCommand('copy');
+              document.body.removeChild(ta);
+              if (ok) onCopied(); else alert('复制失败，请手动复制：' + text);
+            } catch(e2) { alert('复制失败，请手动复制：' + text); }
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(onCopied).catch(execFallback);
+          } else {
+            execFallback();
+          }
         });
 
         var dlBtn = document.createElement('button');
         dlBtn.className = 'action-btn action-btn--primary';
         dlBtn.textContent = '下载 PNG';
         dlBtn.addEventListener('click', function() {
-          var canvas = wrap.querySelector('canvas');
-          var imgEl  = wrap.querySelector('img');
+          if (!qrDataUrl) { alert('下载失败'); return; }
           var a = document.createElement('a');
           a.download = 'qrcode.png';
-          if (canvas)     { a.href = canvas.toDataURL('image/png'); a.click(); }
-          else if (imgEl) { a.href = imgEl.src; a.click(); }
+          a.href = qrDataUrl;
+          a.click();
         });
 
         actions.appendChild(copyBtn);

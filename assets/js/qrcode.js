@@ -372,7 +372,7 @@ var QRCode;
 			this._elImage.alt = "Scan me!";
 			this._elImage.style.display = "none";
 			this._el.appendChild(this._elImage);
-			this._bSupportDataURI = null;
+			this._bSupportDataURI = true;
 		};
 			
 		/**
