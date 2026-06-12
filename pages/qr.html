@@ -485,25 +485,31 @@
 
         // Render into a detached div — never appended to DOM
         var wrap = document.createElement('div');
-        try {
-          new QRCode(wrap, {
-            text: text,
-            width: 240,
-            height: 240,
-            colorDark: '#070b14',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.M
-          });
-        } catch(e) {
-          showError('生成失败，请检查输入内容是否有效');
+        var generated = false;
+        var levels = [QRCode.CorrectLevel.L, QRCode.CorrectLevel.M, QRCode.CorrectLevel.Q, QRCode.CorrectLevel.H];
+        for (var li = 0; li < levels.length; li++) {
+          try {
+            new QRCode(wrap, {
+              text: text,
+              width: 240,
+              height: 240,
+              colorDark: '#070b14',
+              colorLight: '#ffffff',
+              correctLevel: levels[li]
+            });
+            generated = true;
+            break;
+          } catch(e) { console.error('[QR] level', li, 'failed:', e); wrap.innerHTML = ''; }
+        }
+        if (!generated) {
+          console.error('[QR] all levels failed, text length:', text.length);
+          showError('内容过长，无法生成二维码（建议不超过 2000 字符）');
           return;
         }
 
-        // Synchronously grab canvas data URL before the library's async iframe step fires.
-        // This avoids the file:// security block on iframe-based img conversion.
         var cv = wrap.querySelector('canvas');
         var qrDataUrl = '';
-        if (cv) { try { qrDataUrl = cv.toDataURL('image/png'); } catch(e) {} }
+        if (cv) { try { qrDataUrl = cv.toDataURL('image/png'); } catch(e) { console.error('[QR] toDataURL failed:', e); } }
 
         var displayEl;
         if (qrDataUrl) {
@@ -511,9 +517,11 @@
           displayEl.src = qrDataUrl;
           displayEl.style.cssText = 'display:block;width:240px;height:240px;';
         } else if (cv) {
+          console.warn('[QR] toDataURL unavailable, using canvas element directly');
           cv.style.cssText = 'display:block;width:240px;height:240px;';
           displayEl = cv;
         } else {
+          console.error('[QR] no canvas found in wrap');
           showError('生成失败，请检查输入内容是否有效');
           return;
         }
@@ -583,7 +591,7 @@
       }
 
       genBtn.addEventListener('click', generate);
-      input.addEventListener('keydown', function(e) { if (e.key === 'Enter') generate(); });
+      input.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.isComposing) generate(); });
 
       document.getElementById('fill-current').addEventListener('click', function() {
         input.value = window.location.href;
