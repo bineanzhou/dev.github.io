@@ -480,6 +480,12 @@
       }
 
       function generate() {
+        try { _generate(); } catch(err) {
+          console.error('[QR] unexpected error:', err);
+          showError('生成失败：' + (err && err.message ? err.message : String(err)));
+        }
+      }
+      function _generate() {
         var text = input.value.trim();
         if (!text) { showEmpty('请输入内容后生成'); return; }
 

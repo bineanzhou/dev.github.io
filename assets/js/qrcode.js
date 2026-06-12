@@ -620,6 +620,8 @@ var QRCode;
 	QRCode.CorrectLevel = QRErrorCorrectLevel;
 })();
 
+  window.QRCode = QRCode;
+
   // ===== QR Code UI Module =====
   window.QRCodeUI = {
     _currentUrl: '',
